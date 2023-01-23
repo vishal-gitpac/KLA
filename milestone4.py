@@ -2,7 +2,7 @@
 # Open function to open the file "MyFile1.txt"
 # (same directory) in append mode and
 from shapely.geometry import Polygon
-
+import math
 
 def convert(list):
     return tuple(list)
@@ -21,15 +21,32 @@ def polygonArea(vertices, n):
  
     # Return absolute value
     return int(abs(area / 2.0))    
-
+lens=[]
 def check_polygon_identity(vertices1, vertices2):
     #print(type(vertices1))
     poly1 = Polygon(vertices1)
     poly2 = Polygon(vertices2)
     #print(line1.equals(line2))
+    lengths1=[]
+    lengths2=[]
+    for i in range(len(vertices1)):
+        lengths1.append(math.dist(vertices1[i%(len(vertices1))],vertices1[(i+1)%(len(vertices1))]))
+    for i in range(len(vertices2)):
+        lengths2.append(math.dist(vertices2[i%(len(vertices2))],vertices2[(i+1)%(len(vertices2))]))
+    #print(lengths1[0])
+    #print(lengths2[0])    
+    check=True    
+    for i in range(len(lengths1)):
+        if(lengths1[i]!=lengths2[i]):
+            check=False
+    if check==False:
+        return False
+    #print(lengths)        
     if(polygonArea(vertices1,len(vertices1))==polygonArea(vertices2,len(vertices2))):
         return True
     return poly1.equals(poly2)
+
+vertices_POI=[]    
 
 with open("D:\KLA\main\Milestone_Input\Milestone 4\POI.txt") as f:
     lines = f.readlines()
@@ -98,9 +115,13 @@ with open("D:\KLA\main\Milestone_Input\Milestone 4\POI.txt") as f:
                                 count += 1
                         number = ""
                         digit = False
+                vertices_POI.append(vertices)        
                 poly_cnt += 1
                 start = False
-vertices_POI = vertices
+vertices_POI1 = vertices_POI[0]
+vertices_POI2= vertices_POI[1]
+print(vertices_POI1)
+print(vertices_POI2)
 with open("output4.txt", "w") as f:
     f.write("header 600\n")
     f.write("bgnlib 1/19/2023 19:25:24 1/19/2023 19:25:24\n")
@@ -174,10 +195,8 @@ with open("D:\KLA\main\Milestone_Input\Milestone 4\Source.txt") as f:
                                 vertice.append(int(number))
                                 count += 1
                         number = ""
-                        digit = False
-                
-                if(check_polygon_identity(vertices_POI, vertices)):
-                    print(vertices)
+                        digit = False        
+                if(check_polygon_identity(vertices_POI1, vertices)):
                     with open("output4.txt", "a") as f:
                         f.write("boundary\nlayer 1\ndatatype 0\n")
                         f.write("xy "+str(no_of_vertices)+" ")
@@ -186,6 +205,16 @@ with open("D:\KLA\main\Milestone_Input\Milestone 4\Source.txt") as f:
                                 f.write(str(vr)+" ")
                         for vr in vertices[0]:
                             f.write(str(vr)+" ")
-                        f.write("\nendel\n")    
+                        f.write("\nendel\n")
+                if(check_polygon_identity(vertices_POI2, vertices)):
+                    with open("output4.txt", "a") as f:
+                        f.write("boundary\nlayer 1\ndatatype 0\n")
+                        f.write("xy "+str(no_of_vertices)+" ")
+                        for vrs in vertices:
+                            for vr in vrs:
+                                f.write(str(vr)+" ")
+                        for vr in vertices[0]:
+                            f.write(str(vr)+" ")
+                        f.write("\nendel\n")                
                 poly_cnt += 1
-                start = False
+                start = False                
