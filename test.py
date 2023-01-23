@@ -1,5 +1,5 @@
 a1 = [3,4,5,1,2,4,2]
-a2 = [4,5,1,2,4,2,3]
+a2 = [5,1,2,4,2,3,4]
 
 # Array a2 is rotation of array a1 if it's sublist of a1+a1
 def is_rotation(a1, a2):
@@ -25,3 +25,4 @@ def check_sublist(a1, a2):
               return True
 
    return j == len(a2)
+print(is_rotation(a1,a2))

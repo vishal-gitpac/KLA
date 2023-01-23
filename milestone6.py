@@ -20,7 +20,35 @@ def polygonArea(vertices, n):
      
  
     # Return absolute value
-    return int(abs(area / 2.0))    
+    return int(abs(area / 2.0)) 
+
+a1 = [3,4,5,1,2,4,2]
+a2 = [4,5,1,2,4,2,3]
+
+# Array a2 is rotation of array a1 if it's sublist of a1+a1
+def is_rotation(a1, a2):
+   if len(a1) != len(a2):
+       return False
+
+   double_array = a1 + a1
+
+   return check_sublist(double_array, a2)
+
+def check_sublist(a1, a2):
+   if len(a1) < len(a2):
+       return False
+
+   j = 0
+   for i in range(len(a1)):
+        if a1[i] == a2[j]:
+              j += 1
+        else:
+              j = 0
+
+        if j == len(a2):
+              return True
+
+   return j == len(a2)      
 
 def check_polygon_identity(vertices1, vertices2):
     #print(type(vertices1))
@@ -46,15 +74,18 @@ def check_polygon_identity(vertices1, vertices2):
     check = True
     if len(lengths1)!=len(lengths2):
         return False
-    lengths1.sort() 
-    lengths2.sort()    
-    if(lengths1==lengths2):
+    if(is_rotation(lengths1,lengths2)):
         return True
-    else:
+    else:       
+        '''lengths1.sort() 
+        lengths2.sort()    
+        if(lengths1==lengths2):
+            return True
+        else:'''
+        scale=lengths2[0]/lengths1[0]
         for i in range(len(lengths1)):
-            if(lengths2[i]%lengths1[i]!=0 and lengths1[i]%lengths2[i]!=0):
+            if(lengths2[i]/lengths1[i]!=scale):
                 check=False
-
         return check   
     xor=1    
     for i in range(len(lengths1)):
