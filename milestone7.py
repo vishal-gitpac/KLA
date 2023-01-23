@@ -46,6 +46,16 @@ def check_polygon_identity(vertices1, vertices2):
     check = True
     if len(lengths1)!=len(lengths2):
         return False
+        
+    lengths1.sort() 
+    lengths2.sort()
+    if(lengths1==lengths2):
+        return True
+    else:
+        for i in range(len(lengths1)):
+            if(lengths2[i]%lengths1[i]!=0 and lengths1[i]%lengths2[i]!=0):
+                check=False
+        return False        
     for i in range(len(lengths1)):
         if lengths1[i] != lengths2[i]:
             check = False
@@ -55,8 +65,7 @@ def check_polygon_identity(vertices1, vertices2):
     for i in range(len(lengths1)):
         xor^=(int(lengths1[i])^int(lengths2[i]))
     if xor==0:
-        return True
-
+        return True    
     if(polygonArea(vertices1,len(vertices1))==polygonArea(vertices2,len(vertices2))):
         return True
     return poly1.equals(poly2)
